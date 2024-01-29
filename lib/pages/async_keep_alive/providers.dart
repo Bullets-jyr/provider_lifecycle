@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:dio/dio.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
@@ -14,15 +16,21 @@ Dio dio(DioRef ref) {
 
 @riverpod
 FutureOr<List<Product>> getProducts(GetProductsRef ref) async {
+  final cancelToken = CancelToken();
+  Timer? timer;
+
   print('[getProductsProvider] initialized');
   ref.onDispose(() {
-    print('[getProductsProvider] disposed');
+    print('[getProductsProvider] disposed, token cancelled, timer cancelled');
+    timer?.cancel();
+    cancelToken.cancel();
   });
   ref.onCancel(() {
     print('[getProductsProvider] cancelled');
   });
   ref.onResume(() {
-    print('[getProductsProvider] resumed');
+    print('[getProductsProvider] resumed, timer cancelled');
+    timer?.cancel();
   });
   ref.onAddListener(() {
     print('[getProductsProvider] listener added');
@@ -31,9 +39,23 @@ FutureOr<List<Product>> getProducts(GetProductsRef ref) async {
     print('[getProductsProvider] listener removed');
   });
 
-  final response = await ref.watch(dioProvider).get('/products');
+  final response = await ref.watch(dioProvider).get(
+    '/products',
+    cancelToken: cancelToken,
+  );
+
+  final keepAliveLink = ref.keepAlive();
+
+  ref.onCancel(() {
+    print('[getProductsProvider] cancelled, timer started');
+    timer = Timer(const Duration(seconds: 10), () {
+      keepAliveLink.close();
+    });
+  });
 
   final List productList = response.data['products'];
+
+  print(productList[0]);
 
   final products = [
     for (final product in productList) Product.fromJson(product)
