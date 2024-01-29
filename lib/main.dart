@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+import 'pages/async_keep_alive/products_page.dart';
 import 'pages/auto_dispose/auto_dispose_page.dart';
 import 'pages/keep_alive/keep_alive_page.dart';
 import 'pages/provider_cascade/provider_cascade_page.dart';
@@ -65,6 +66,10 @@ class MyHomePage extends StatelessWidget {
             CustomButton(
               title: 'SyncKeepAlive',
               child: SyncKeepAlivePage(),
+            ),
+            CustomButton(
+              title: 'AsyncKeepAlive',
+              child: ProductsPage(),
             ),
           ],
         ),
