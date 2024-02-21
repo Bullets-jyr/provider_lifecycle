@@ -28,7 +28,9 @@ class MyApp extends StatelessWidget {
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
         useMaterial3: true,
         textTheme: const TextTheme(
+          // 텍스트 위젯 기본 사이즈
           bodyMedium: TextStyle(fontSize: 48),
+          // 버튼 텍스트 기본 사이즈
           labelLarge: TextStyle(fontSize: 24),
         ),
       ),

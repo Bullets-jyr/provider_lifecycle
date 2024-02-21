@@ -40,6 +40,9 @@ class AutoDisposePage extends ConsumerWidget {
       floatingActionButton: Row(
         mainAxisAlignment: MainAxisAlignment.end,
         children: [
+          // FloatingActionButton: Hero Animation
+          // 한 페이지에 여러개의 FloatingActionButton이 있을 경우
+          // heroTag를 줘서 구분을 해야합니다.
           FloatingActionButton(
             heroTag: '1',
             onPressed: () {
